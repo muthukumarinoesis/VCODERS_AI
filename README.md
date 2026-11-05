@@ -44,7 +44,7 @@ cp .env.example .env
 .venv/bin/python -m examples.admin create-key quicktest      # the client's API key, shown once
 .venv/bin/uvicorn --factory examples.fastapi_app:create_app_from_env --port 8100
 .venv/bin/celery -A examples.worker worker -Q quiz
-.venv/bin/celery -A examples.worker beat
+.venv/bin/celery -A examples.worker beat --schedule var/celerybeat-schedule
 ```
 
 Schema changes: edit `examples/db.py`, then `alembic revision --autogenerate -m "..."` and review the file.

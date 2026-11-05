@@ -43,7 +43,7 @@ services:
       migrate: {condition: service_completed_successfully}
   beat:
     <<: *app
-    command: ["celery", "-A", "examples.worker", "beat"]
+    command: ["celery", "-A", "examples.worker", "beat", "--schedule", "/app/var/celerybeat-schedule"]
     depends_on:
       migrate: {condition: service_completed_successfully}
 

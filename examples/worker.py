@@ -102,7 +102,13 @@ def run_job(ctx, job_id: str, heartbeat_s: float = HEARTBEAT_S) -> str:
             status="failed", error="timed_out", message="Making this quiz took too long. Try fewer questions."
         )
     except Exception as e:
-        log.exception("job %s failed; decision %s", job_id, json.dumps(job and job["decision"]))
+        decision = json.dumps(job and job["decision"])
+        if getattr(
+            e, "code", None
+        ):  # an expected failure the client is told about (no_text, poor_quality...)
+            log.warning("job %s failed: %s; decision %s", job_id, e.code, decision)
+        else:
+            log.exception("job %s failed; decision %s", job_id, decision)
         outcome = dict(
             status="failed",
             error=getattr(e, "code", "pipeline_error"),

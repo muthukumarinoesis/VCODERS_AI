@@ -126,7 +126,8 @@ def test_dotenv_loader(tmp_path, monkeypatch):
     from examples.context import load_dotenv
 
     (tmp_path / ".env").write_text(
-        '# comment\nNEW_ONE="hello # not a comment"\n\nKEPT=from-file\nnot a line\nDIR=var/x    # note\nEMPTY=   # c\n'
+        '# comment\nNEW_ONE="hello # not a comment"\n\nKEPT=from-file\nnot a line\n'
+        "DIR=var/x    # note\nEMPTY=   # c\n"
     )
     for name in ("DIR", "EMPTY"):
         monkeypatch.delenv(name, raising=False)
