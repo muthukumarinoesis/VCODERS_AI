@@ -1,0 +1,6 @@
+name: tamil_text
+match: {input: text, language: ta}
+priority: 0
+# ---- pipeline config (paste from the builder) ----
+quiz:
+  types: [mcq_single]

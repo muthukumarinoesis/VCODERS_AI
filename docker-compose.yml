@@ -1,0 +1,52 @@
+# The whole service on one machine: docker compose up --build
+# Secrets come from .env (see .env.example); the URLs below point inside this network.
+x-app: &app
+  build: .
+  image: vcoders/quiz-service
+  env_file: .env
+  environment:
+    DATABASE_URL: postgresql+psycopg://postgres:${POSTGRES_PASSWORD:-change-me}@db:5432/quiz
+    REDIS_URL: redis://redis:6379/0
+    STORAGE_DIR: /app/var/storage
+  volumes:
+    - uploads:/app/var/storage
+  depends_on:
+    db: {condition: service_healthy}
+    redis: {condition: service_started}
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: quiz
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d quiz"]
+      interval: 5s
+      retries: 10
+  redis:
+    image: redis:7-alpine
+  migrate:
+    <<: *app
+    command: ["alembic", "upgrade", "head"]
+    restart: "no"
+  api:
+    <<: *app
+    ports: ["127.0.0.1:8100:8100"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+  worker:
+    <<: *app
+    command: ["celery", "-A", "examples.worker", "worker", "-Q", "quiz", "--concurrency", "4"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+  beat:
+    <<: *app
+    command: ["celery", "-A", "examples.worker", "beat"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+
+volumes:
+  pgdata:
+  uploads:

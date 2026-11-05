@@ -1,0 +1,23 @@
+name: default
+match: {}            # any file nothing more specific fits
+priority: 0
+# ---- pipeline config (paste from the builder) ----
+readers:
+  pdf: {impl: pymupdf}
+  docx: {impl: python_docx}
+  doc: {impl: libreoffice, then: python_docx}
+  pptx: {impl: python_pptx}
+  ppt: {impl: libreoffice, then: python_pptx}
+  xlsx: {impl: openpyxl}
+  xls: {impl: libreoffice, then: openpyxl}
+  odt: {impl: odfpy}
+  odp: {impl: libreoffice, then: python_pptx}
+  ods: {impl: libreoffice, then: openpyxl}
+  rtf: {impl: rtf}
+  txt: {impl: plain}
+  md: {impl: plain}
+  csv: {impl: csv}
+  html: {impl: html}
+  image: {impl: cached_ocr}
+quiz:
+  types: [mcq_single]

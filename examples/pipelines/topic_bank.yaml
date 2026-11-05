@@ -1,0 +1,7 @@
+name: topic_bank
+match: {input: topic}  # question bank first, then generate
+priority: 0
+# ---- pipeline config (paste from the builder) ----
+sources: [question_bank, generate]
+quiz:
+  types: [mcq_single]

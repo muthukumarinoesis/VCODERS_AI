@@ -1,0 +1,7 @@
+[flake8]
+max-line-length = 110
+extend-ignore = E203,E731
+extend-exclude = .venv,node_modules
+per-file-ignores =
+    # OMML and math test data: long XML strings read best on one line
+    tests/test_steps.py: E501

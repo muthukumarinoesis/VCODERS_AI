@@ -1,0 +1,14 @@
+# projects.yaml (API keys are NOT stored here: they're hashed in the service database)
+quicktest:
+  allowed: "*"                                   # or a list of pipeline names
+  subjects: [physics, chemistry, biology, mathematics]
+  max_file_mb: 20                                # optional, must be <= the safety cap
+  webhook: https://quicktest.example/hooks/quiz  # optional; its signing secret is stored encrypted in the database
+  limits:                                        # optional; defaults in section 9.5
+    route_per_minute: 60
+    jobs_per_minute: 20
+    jobs_at_once: 10
+    jobs_per_day: 2000
+    pages_per_day: 50000
+quickans:
+  allowed: [text_default, topic_bank, default]

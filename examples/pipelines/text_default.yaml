@@ -1,0 +1,6 @@
+name: text_default
+match: {input: text}   # pasted text: starts at chunking
+priority: 0
+# ---- pipeline config (paste from the builder) ----
+quiz:
+  types: [mcq_single]

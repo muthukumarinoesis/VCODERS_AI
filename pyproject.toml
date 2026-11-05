@@ -1,0 +1,6 @@
+[tool.black]
+line-length = 110
+extend-exclude = "node_modules"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
